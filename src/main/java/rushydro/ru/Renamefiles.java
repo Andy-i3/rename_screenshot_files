@@ -5,6 +5,9 @@ package rushydro.ru;
 // @version 1.3
 // @sin 0.1
 
+
+
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,15 +23,26 @@ public class Renamefiles {
         // Цикл по коллекции и модефикация названия файлов
         for (File file : collect) {
             String currentNameFile = file.getName();
-            String currentNamePatch = file.getAbsolutePath();
-            currentNamePatch = currentNamePatch.substring( 0, currentNamePatch.length() - currentNameFile.length()- 1 );
             // фильтрация и переименование файлов по маске .00. и JPG
             if ((currentNameFile.replaceAll( "^.*\\.(.*)$", "$1" ).equals( "jpg" ))) {
-                if ((currentNameFile.substring( currentNameFile.length() - 10, currentNameFile.length() - 6 )).equals( ".00." )) {
-                     String filename = RenameOnefile(currentNameFile);
+                if ((currentNameFile.substring( currentNameFile.length() - 9, currentNameFile.length() - 7 )).matches( ".*[0-9].*[0-9]" )) {
+
+                    String currentNamePatch = file.getAbsolutePath();
+                    currentNamePatch = currentNamePatch.substring( 0, currentNamePatch.length() - currentNameFile.length() - 1 );
+                    String[] pars = currentNamePatch.split( "\\\\" );
+
+                    String filename = null;
+                    String f1 = pars[pars.length - 1];
+                    if ((currentNameFile.substring( 0, f1.length() ).toLowerCase().equals( f1.toLowerCase() ))) {
+                         filename = RenameOnefile( currentNameFile, f1.length() );
+                    } else {
+                         filename = RenameOnefile( currentNameFile, 0 );
+                    }
+
                     try {
-                      // boolean b = file.renameTo( new File( currentNamePatch  + "\\" + filename  ) ); // Переименование файлов
-                        System.out.println(currentNamePatch  + "\\" + filename ); // Переименование файлов
+
+                        // boolean b = file.renameTo( new File( currentNamePatch  + "\\" + filename  ) ); // Переименование файлов
+                        System.out.println( currentNamePatch + "\\" + filename ); // Переименование файлов
                     }
                     // Обработка ошибок
                     catch (StringIndexOutOfBoundsException sio) {
@@ -43,18 +57,17 @@ public class Renamefiles {
         }
     }
 
-    public static void main(String[] args) {
-        String str = args[0];
-        String pathToDirectory = null;
-        if (str.length() > 0) {
+    public static void main(String[] args) throws Exception {
+        try {
+            String str = args[0];
+            String pathToDirectory = null;
             String[] pArray = str.split( "\\\\" );
             pathToDirectory = str; // Путь к директории с файлами
             new Renamefiles( scanNameFiles( pathToDirectory, pArray.length ) );
-        } else {
-            System.out.println( "No directory with files to process" );
-            System.exit( 0 );
+            System.out.println( "Successfully completed" );
+        } catch (Exception e) {
+            System.out.println( "The path to the file directory is not defined." );
         }
-               System.out.println( "Successfully completed" );
     }
 
     // Сканирование директории
@@ -80,7 +93,11 @@ public class Renamefiles {
     // Input: загорская гаэс-2 (строительная площадка 1) 17_05_2019 11.00.00.jpg
     // Output: 17-05-2019 11-00 Загорская гаэс-2 строительная площадка 1.jpg
     // @return
-    public static String RenameOnefile( String nameFile) {
+    public static String RenameOnefile(String nameFile, int ColStr) {
+        if (ColStr != 0 && ColStr>5) {
+            nameFile = nameFile.substring( 0, ColStr );
+            System.out.println( nameFile );
+        }
         nameFile = nameFile.replace( "(", "" ); // Удалить скобки
         nameFile = nameFile.replace( ")", "" ); // Удалить скобки
         nameFile = nameFile.replaceAll( "^\\s+", "" ); // Удалить пробелы в начале строки

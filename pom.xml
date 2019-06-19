@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.rushydro</groupId>
     <artifactId>rename_screenshot_files</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>2.0</version>
     <name>rename_screenshot_files</name>
     
@@ -42,6 +42,17 @@
           <configLocation>google_checks.xml</configLocation>
         </configuration>
       </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                              <mainClass>rushydro.ru.Renamefiles</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
