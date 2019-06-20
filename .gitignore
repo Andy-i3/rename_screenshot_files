@@ -24,6 +24,8 @@
 hs_err_pid*
 target/
 config/
+help/
+test_rename_files/
 
 .idea
 *.iml
