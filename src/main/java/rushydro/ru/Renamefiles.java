@@ -60,7 +60,7 @@ public class Renamefiles {
                     }
                     try {
                          if (!Test.equals( "test" )) {
-                           file.renameTo( new File( currentNamePatch + "\\" + filename ) ); // Переименование файлов
+                            file.renameTo( new File( currentNamePatch + "\\" + filename ) ); // Переименование файлов
                          }
                         System.out.println( currentNamePatch + "\\" + filename ); // Переименование файлов
                     } catch (StringIndexOutOfBoundsException sio) {
@@ -90,11 +90,9 @@ public class Renamefiles {
                 String pathToDirectory = null;
                 String[] pArray = str.split( "\\\\" );
                 pathToDirectory = str; // Путь к директории с файлами
+                if (args.length > 1) Test = args[1];
                 RenameAllfiles( scanNameFiles( pathToDirectory, pArray.length ) );
                 System.out.println( "Successfully completed" );
-                if (args.length > 1) {
-                    Test = args[1];
-                }
             }
           else
             {
